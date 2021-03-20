@@ -1,7 +1,7 @@
 # Beitech
-Prueba tecnica Python Beitech.
-Proyecto desarrollado en Django + SQLite + Restframework
 
+Prueba tecnica Python Beitech.
+Proyecto desarrollado en Django + SQLite + Restframework + Reactjs
 
 # Para para instalar proyecto en modo desarrollo
 
