@@ -24,7 +24,7 @@ class CustomerProductAdmin(admin.ModelAdmin):
     """
         Customer product admin
     """
-    list_display = ('id', 'customer', 'product',)
+    list_display = ('id', 'customer', 'product', 'price')
     list_display_links = ('id',)
     search_fields = ('customer__name', 'product__name',)
 
@@ -38,7 +38,7 @@ class OrderAdmin(admin.ModelAdmin):
     """
         Order admin
     """
-    list_display = ('order_id', 'customer', 'creation_date',
+    list_display = ('order_id', 'customer', 'date', 'creation_date',
                     'delivery_address', 'total',)
     list_display_links = ('order_id',)
     list_filter = ('customer',)

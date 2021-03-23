@@ -42,6 +42,8 @@ class CustomerProduct(models.Model):
         Customer, verbose_name='Customer', on_delete=models.CASCADE)
     product = models.ForeignKey(
         Product, verbose_name='Product', on_delete=models.CASCADE)
+    price = models.DecimalField(
+        verbose_name='Price', max_digits=10, decimal_places=2)
 
     def __str__(self):
         return "{} | {}".format(self.customer, self.product)
@@ -59,6 +61,7 @@ class Order(models.Model):
     order_id = models.AutoField(verbose_name='Id', primary_key=True)
     customer = models.ForeignKey(
         Customer, verbose_name='Customer', on_delete=models.CASCADE)
+    date = models.DateField(verbose_name='Date')
     creation_date = models.DateField(auto_now_add=True)
     delivery_address = models.CharField(
         verbose_name='Delivery address', max_length=191)
@@ -93,3 +96,4 @@ class OrderDetail(models.Model):
     class Meta:
         verbose_name = 'product detail'
         verbose_name_plural = 'product details'
+        unique_together = (('order', 'product',),)
