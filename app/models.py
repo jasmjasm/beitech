@@ -1,98 +1,95 @@
 from django.db import models
-from .abstract import InfoComun
-from .validators import valida_pdf
-from django.utils.translation import ugettext as _
 
 
-class ClienteManager(models.Manager):
-    def clientes_activos(self):
-        return self.get_queryset().filter(activo=True)
+class Customer(models.Model):
+    """
+        Customer model
+    """
+    customer_id = models.AutoField(verbose_name='Id', primary_key=True)
+    name = models.CharField(verbose_name='Name', max_length=191)
+    email = models.EmailField(verbose_name='Email',
+                              max_length=191, unique=True)
 
-    def clientes_inactivos(self):
-        return self.get_queryset().filter(activo=False)
-
-
-# clase cliente que hereda de la clase abstracta infocomun
-class Cliente(InfoComun):
-
-    # selecciones
-    TALLAS_CHOICES = (
-        ('1', 'XS'),
-        ('2', 'S'),
-        ('3', 'M'),
-        ('4', 'L'),
-        ('5', 'XL'),
-    )
-
-    apellido = models.CharField(_("apellido"), max_length=50)
-    cedula = models.IntegerField(_("cedula"), unique=True)
-    nacimiento = models.DateField(
-        _("nacimiento"), null=True, blank=True, help_text="AAAA-MM-DD")
-    talla = models.CharField(_('talla'), max_length=1,
-                             choices=TALLAS_CHOICES, blank=True)
-    rut = models.FileField(_("RUT"), validators=[
-                           valida_pdf], blank=True, upload_to='static/rut/')
-
-    objects = ClienteManager()
-
-    # propiedad obtiene el nombre completo
-    def _get_nombre_completo(self):
-        return '%s %s' % (self.nombre, self.apellido)
-    nombre_completo = property(_get_nombre_completo)
-
-    # sobreescribe el metodo guardar
-    def save(self, *args, **kwargs):
-        super(Cliente, self).save(*args, **kwargs)
-
-    # sobreescribe el metodo eliminar
-    def delete(self, *args, **kwargs):
-        super(Cliente, self).delete(*args, **kwargs)
-
-    class Meta(InfoComun.Meta):
-        verbose_name_plural = _('clientes')
-
-
-# clase tipo proxy que extiende funcionalidad de la clase padre
-class ClienteOrdenadoDesc(Cliente):
-
-    def _get_longitud_apellido(self):
-        return len(self.apellido)
+    def __str__(self):
+        return self.name
 
     class Meta:
-        ordering = ["-apellido"]
-        proxy = True
+        verbose_name_plural = 'customers'
 
 
-class Articulo(InfoComun):
-    precio = models.IntegerField(_("precio"), default=0)
+class Product(models.Model):
+    """
+        Product model
+    """
+    product_id = models.AutoField(verbose_name='Id', primary_key=True)
+    name = models.CharField(verbose_name='Name', max_length=191)
+    description = models.CharField(verbose_name='Description', max_length=191)
+    price = models.DecimalField(
+        verbose_name='Price', max_digits=10, decimal_places=2)
 
-    class Meta(InfoComun.Meta):
-        verbose_name_plural = _('articulos')
-
-
-class Factura(models.Model):
-    cliente = models.ForeignKey(Cliente)
-    fecha = models.DateField(blank=False, null=False)
-
-    def __unicode__(self):
-        return u'%s %s' % (self.id, self.fecha)
-
-    # metodo personalizado dentro de modelo
-    def es_de_hoy(self):
-        from datetime import date
-        if self.fecha == date.today():
-            return "si"
-        else:
-            return "no"
+    def __str__(self):
+        return self.name
 
     class Meta:
-        verbose_name_plural = _('facturas')
+        verbose_name_plural = 'products'
 
 
-class FacturaDetalle(models.Model):
-    factura = models.ForeignKey(Factura)
-    articulo = models.ForeignKey(Articulo)
-    cantidad = models.IntegerField()
+class CustomerProduct(models.Model):
+    """
+        Customer products model
+    """
+    customer = models.ForeignKey(
+        Customer, verbose_name='Customer', on_delete=models.CASCADE)
+    product = models.ForeignKey(
+        Product, verbose_name='Product', on_delete=models.CASCADE)
 
-    def __unicode__(self):
-        return u'%s' % self.articulo
+    def __str__(self):
+        return "{} | {}".format(self.customer, self.product)
+
+    class Meta:
+        verbose_name = 'customer product'
+        verbose_name_plural = 'customer products'
+        unique_together = (('customer', 'product',),)
+
+
+class Order(models.Model):
+    """
+        Order model
+    """
+    order_id = models.AutoField(verbose_name='Id', primary_key=True)
+    customer = models.ForeignKey(
+        Customer, verbose_name='Customer', on_delete=models.CASCADE)
+    creation_date = models.DateField(auto_now_add=True)
+    delivery_address = models.CharField(
+        verbose_name='Delivery address', max_length=191)
+    total = models.DecimalField(
+        verbose_name='Total', max_digits=14, decimal_places=2)
+
+    def __str__(self):
+        return "{} | {}".format(self.order_id, self.customer)
+
+    class Meta:
+        verbose_name_plural = 'orders'
+
+
+class OrderDetail(models.Model):
+    """
+        Order detail model
+    """
+    order_detail_id = models.AutoField(verbose_name='Id', primary_key=True)
+    order = models.ForeignKey(
+        Order, verbose_name='Order', on_delete=models.CASCADE)
+    product = models.ForeignKey(
+        Product, verbose_name='Product', on_delete=models.CASCADE)
+    product_description = models.CharField(
+        verbose_name='Product description', max_length=191)
+    price = models.DecimalField(
+        verbose_name='Price', max_digits=10, decimal_places=2)
+    quantity = models.BigIntegerField(verbose_name='Quantity')
+
+    def __str__(self):
+        return "{} | {} | {}".format(self.order_detail_id, self.order, self.product)
+
+    class Meta:
+        verbose_name = 'product detail'
+        verbose_name_plural = 'product details'

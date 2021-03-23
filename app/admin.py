@@ -1,33 +1,54 @@
 from django.contrib import admin
 from .models import *
-from .abstract import InfoComunAdmin
 
 
-class ClienteAdmin(InfoComunAdmin):
-    list_display = InfoComunAdmin.list_display + \
-        ('apellido', 'cedula', 'nacimiento', 'talla')
-    search_fields = InfoComunAdmin.search_fields + \
-        ('apellido', 'cedula', 'nacimiento', 'talla')
+class CustomerAdmin(admin.ModelAdmin):
+    """
+        Customer admin
+    """
+    list_display = ('customer_id', 'name', 'email',)
+    list_display_links = ('name',)
+    search_fields = ('name', 'email',)
 
 
-class ArticuloAdmin(InfoComunAdmin):
-    list_display = InfoComunAdmin.list_display + ('precio',)
-    search_fields = InfoComunAdmin.search_fields + ('precio',)
+class ProductAdmin(admin.ModelAdmin):
+    """
+        Product admin
+    """
+    list_display = ('product_id', 'name', 'description', 'price')
+    list_display_links = ('name',)
+    search_fields = ('name', 'description',)
 
 
-class FacturaDetalleInLine(admin.TabularInline):
-    model = FacturaDetalle
-    fields = ('articulo', 'cantidad')
+class CustomerProductAdmin(admin.ModelAdmin):
+    """
+        Customer product admin
+    """
+    list_display = ('id', 'customer', 'product',)
+    list_display_links = ('id',)
+    search_fields = ('customer__name', 'product__name',)
 
 
-class FacturaAdmin(admin.ModelAdmin):
-    list_display = ('id', 'fecha', 'cliente', 'es_de_hoy')
-    search_fields = ('fecha', 'cliente')
+class OrderDetailInLine(admin.TabularInline):
+    model = OrderDetail
+    fields = ('product', 'product_description', 'price', 'quantity',)
+
+
+class OrderAdmin(admin.ModelAdmin):
+    """
+        Order admin
+    """
+    list_display = ('order_id', 'customer', 'creation_date',
+                    'delivery_address', 'total',)
+    list_display_links = ('order_id',)
+    list_filter = ('customer',)
+    search_fields = ('customer__name', 'delivery_address',)
     inlines = [
-        FacturaDetalleInLine
+        OrderDetailInLine
     ]
 
 
-admin.site.register(Cliente, ClienteAdmin)
-admin.site.register(Factura, FacturaAdmin)
-admin.site.register(Articulo, ArticuloAdmin)
+admin.site.register(Customer, CustomerAdmin)
+admin.site.register(Product, ProductAdmin)
+admin.site.register(CustomerProduct, CustomerProductAdmin)
+admin.site.register(Order, OrderAdmin)

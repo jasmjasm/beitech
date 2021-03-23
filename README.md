@@ -11,7 +11,7 @@ Proyecto desarrollado en Django + SQLite + Restframework + Reactjs
 - Crear un archivo .env en la raiz del projecto con la clave secreta para Django. **SECRET_KEY='una_clave_secreta_y_segura_para_mi_aplicacion'**
 - pip install -r requirements.txt
 - python manage.py migrate
-- python manage.py loaddata initial.json
+- python manage.py loaddata initial
 - python manage.py runserver
 - Los datos iniciales crean por defecto un usuario con todos los permisos sobre la aplicacion usuario: **beitech@email.com** con contraseña: **1234**
 
