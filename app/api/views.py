@@ -11,6 +11,13 @@ class OrderViewSet(viewsets.ModelViewSet):
     serializer_class = OrderSerializer
 
 
+class CustomOrderViewSet(OrderViewSet):
+    """
+        Custom order viewset
+    """
+    renderer_classes = [JSONResponseRenderer]
+
+
 class OrderDetailViewSet(viewsets.ModelViewSet):
     """
         Order detail viewset
