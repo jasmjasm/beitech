@@ -15,6 +15,7 @@ class Customer(models.Model):
 
     class Meta:
         verbose_name_plural = 'customers'
+        ordering = ('name',)
 
 
 class Product(models.Model):
@@ -32,6 +33,7 @@ class Product(models.Model):
 
     class Meta:
         verbose_name_plural = 'products'
+        ordering = ('name',)
 
 
 class CustomerProduct(models.Model):
@@ -52,6 +54,7 @@ class CustomerProduct(models.Model):
         verbose_name = 'customer product'
         verbose_name_plural = 'customer products'
         unique_together = (('customer', 'product',),)
+        ordering = ('customer', 'product',)
 
 
 class Order(models.Model):
@@ -97,3 +100,4 @@ class OrderDetail(models.Model):
         verbose_name = 'product detail'
         verbose_name_plural = 'product details'
         unique_together = (('order', 'product',),)
+        ordering = ('order', 'product',)
