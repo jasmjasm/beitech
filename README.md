@@ -1,7 +1,7 @@
 # Beitech
 
 Prueba tecnica Python Beitech.
-Proyecto desarrollado en Django + SQLite + Restframework + Reactjs
+Proyecto desarrollado en Django + SQLite + Restframework + JQuery
 
 ## Para para instalar proyecto en modo desarrollo (backend)
 
@@ -14,9 +14,10 @@ Proyecto desarrollado en Django + SQLite + Restframework + Reactjs
 - python manage.py loaddata initial
 - python manage.py runserver
 - Los datos iniciales crean por defecto un usuario con todos los permisos sobre la aplicacion usuario: **beitech@email.com** con contraseña: **1234**
-
-## Para para instalar proyecto en modo desarrollo (frontend)
-
+- La api rest queda de público acceso por efectos de la prueba.
+- API root: "http://localhost:8000/api/"
+- API order: "http://localhost:8000/api/order/"
+- API order_detail: "http://localhost:8000/api/orderdetail/"
 - 
 
 ## Para acceder al panel administrativo de Django
