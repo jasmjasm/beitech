@@ -60,10 +60,17 @@
             $('#customers').on('change', function() {
                 $('#orders').DataTable().clear().draw();
                 if (this.value != 0){
-                    $.get( 'http://localhost:8000/api/custom-order/?customer=' + this.value, function( response ) {
-                        if (response.data.length > 0){
-                            $('#orders').dataTable().fnAddData(response.data);
-                        }
+                    var today = new Date()
+                    var todayFormat = today.toISOString().split('T')[0];
+                    var lastMonthDate = new Date()
+                    lastMonthDate.setDate(today.getDate() - 30);
+                    var lastMonthDateFormat = lastMonthDate.toISOString().split('T')[0];
+                    $.get( 'http://localhost:8000/api/custom-order/?customer=' + 
+                        this.value + '&date__range=' + lastMonthDateFormat + ',' + todayFormat, 
+                        function( response ) {
+                            if (response.data.length > 0){
+                                $('#orders').dataTable().fnAddData(response.data);
+                            }
                     });
                 }
             });
