@@ -29,6 +29,9 @@ class OrderSerializer(serializers.ModelSerializer):
     products = serializers.SerializerMethodField()
 
     def create(self, validated_data):
+        """
+            Se sobreescribe metodo crear para implementar validaciones
+        """
         error = None
         order_detail = validated_data.pop('order_detail', None)
         # Validaciones para el order_detail recibido
