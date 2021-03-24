@@ -5,7 +5,8 @@ Proyecto desarrollado en Django + SQLite + Restframework + JQuery
 
 ## Para para instalar proyecto en modo desarrollo (backend)
 
-- cd PROJECT_FOLDER
+- Clonar repositorio **https://github.com/jasmjasm/beitech.git**
+- cd beitech
 - python3.7 -m venv venv
 - source venv/bin/activate
 - Crear un archivo .env en la raiz del projecto con la clave secreta para Django. **SECRET_KEY='una_clave_secreta_y_segura_para_mi_aplicacion'**
