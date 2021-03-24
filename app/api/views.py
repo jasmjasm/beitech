@@ -1,4 +1,5 @@
 from rest_framework import viewsets
+from django_filters.rest_framework import DjangoFilterBackend
 from app.models import Order
 from app.api.serializers import *
 
@@ -9,6 +10,10 @@ class OrderViewSet(viewsets.ModelViewSet):
     """
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
+    filterset_fields = {
+        'date':  ['range'],
+        'customer': ['exact']
+    }
 
 
 class CustomOrderViewSet(OrderViewSet):

@@ -40,18 +40,16 @@ Proyecto desarrollado en Django + SQLite + Restframework + JQuery
                 "product": 2
             },
             {
-                "product_description": "lll",
                 "quantity": 2,
                 "product": 4
             },
             {
-                "product_description": "yyy",
                 "quantity": 2,
                 "product": 5
             }
         ]
     }
-
+- Se incluye API para filtrar por range de fecha y cliente: http://localhost:8000/api/order/?date__range=2021-03-01,2021-03-31&customer=1
 
 ## Para acceder al panel administrativo de Django
 

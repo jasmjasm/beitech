@@ -26,6 +26,7 @@ class OrderSerializer(serializers.ModelSerializer):
     # Campo custom que nos permite insertar el orderdetail al momento de crear la orden, con sus respectivas validaciones
     order_detail = serializers.JSONField(write_only=True, required=False)
     customername = serializers.SerializerMethodField()
+    products = serializers.SerializerMethodField()
 
     def create(self, validated_data):
         error = None
@@ -40,7 +41,7 @@ class OrderSerializer(serializers.ModelSerializer):
                 exists = CustomerProduct.objects.filter(
                     customer=validated_data['customer'], product=product_id).exists()
                 if not exists:
-                    error = 'No un product_id ({}) asociado al cliente seleccionado'.format(
+                    error = 'No existe un product_id ({}) asociado al cliente seleccionado'.format(
                         product_id)
                     break
             if len(order_detail) > 5:
@@ -58,7 +59,11 @@ class OrderSerializer(serializers.ModelSerializer):
                     customer=validated_data['customer'], product=detail['product']).first()
                 d = OrderDetail()
                 d.order = instance
-                d.product_description = detail['product_description']
+                # Se asigna el nombre del producto en la product_description de OrderDetail si este no se recibe
+                if not 'product_description' in detail:
+                    d.product_description = customer_product.product.name
+                else:
+                    d.product_description = detail['product_description']
                 d.quantity = detail['quantity']
                 # Se tome el precio del precio definido el CustomerProduct
                 d.price = customer_product.price
@@ -80,7 +85,14 @@ class OrderSerializer(serializers.ModelSerializer):
     def get_customername(self, instance):
         return instance.customer.name
 
+    def get_products(self, instance):
+        products = ''
+        for d in instance.orderdetail_set.all():
+            products += "{} x {}</br>".format(d.quantity,
+                                              d.product_description)
+        return products
+
     class Meta:
         model = Order
         fields = ('order_id', 'creation_date', 'date', 'customer', 'customername',
-                  'delivery_address', 'total', 'orderdetail', 'order_detail')
+                  'delivery_address', 'total', 'orderdetail', 'order_detail', 'products')
