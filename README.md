@@ -13,7 +13,7 @@ Proyecto desarrollado en Django + SQLite + Restframework + JQuery
 - python manage.py migrate
 - python manage.py loaddata initial
 - python manage.py runserver
-- Los datos iniciales crean por defecto un usuario con todos los permisos sobre la aplicacion usuario: **beitech@email.com** con contraseña: **1234**
+- Los datos iniciales crean por defecto un usuario con todos los permisos sobre la aplicacion usuario: **beitech** con contraseña: **1234**
 - La api rest queda de público acceso por efectos de la prueba.
 - API order: "http://localhost:8000/api/order/"
 - Incluyo JSON de prueba para la insercion de la orden en la API:
@@ -54,5 +54,5 @@ Proyecto desarrollado en Django + SQLite + Restframework + JQuery
 ## Para acceder al panel administrativo de Django
 
 - python manage.py runserver
-- **localhost:8000/admin** con el usuario: **beitech@email.com** con contraseña: **1234** se ingresa a este sitio.
+- **localhost:8000/admin** con el usuario: **beitech** con contraseña: **1234** se ingresa a este sitio.
 - En esta secccion se puede visualizar/administrar todos los modelos de datos, se puede establecer los productos por cliente con su respectivo precio.
